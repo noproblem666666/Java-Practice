@@ -1,48 +1,95 @@
 package Leetcode;
 
-//除自身以外数组的乘积
-public class rehot69 {
-    //辅助数组分别记录一个位置左边数的乘积和右边数的乘积
-    public int[] productExceptSelf(int[] nums) {
-        int[] left = new int[nums.length];
-        int[] right = new int[nums.length];
-        left[0] = 1;
-        right[nums.length - 1] = 1;
-        for (int i = 1; i < nums.length; i++) {
-            left[i] = left[i - 1] * nums[i - 1];
+import java.util.ArrayDeque;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.PriorityQueue;
+
+//滑动窗口最大值 Todo：优先队列和双端单调队列
+public class rehot70 {
+    //优先队列
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        //因为还要判断这个数是否在滑动窗口中，只存储数不够，还需要用数组存储下标
+        //默认是小顶堆，初始化均按大顶堆来
+        PriorityQueue<int[]> priorityQueue = new PriorityQueue<>(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0] != o2[0] ? o2[0] - o1[0] : o2[1] - o1[1];
+            }
+        });
+        for (int i = 0; i < k; i++) {
+            priorityQueue.offer(new int[]{nums[i], i});
         }
-        for (int i = nums.length - 2; i >= 0; i--) {
-            right[i] = right[i + 1] * nums[i + 1];
-        }
-        int[] res = new int[nums.length];
-        for (int i = 0; i < nums.length; i++) {
-            res[i] = left[i] * right[i];
+        int len = nums.length - k + 1;
+        int[] res = new int[len];
+        res[0] = priorityQueue.peek()[0];
+        for (int i = k; i < nums.length; i++) {
+            priorityQueue.offer(new int[]{nums[i], i});
+            while (priorityQueue.peek()[1] < i - k + 1) {
+                priorityQueue.poll();
+            }
+            res[i - k + 1] = priorityQueue.peek()[0];
         }
         return res;
     }
 
-    //除返回数组外不占用额外空间
-    public int[] productExceptSelf2(int[] nums) {
-        int length = nums.length;
-        int[] answer = new int[length];
+    //由于我们需要求出的是滑动窗口的最大值，如果当前的滑动窗口中有两个下标 i 和 j，其中 i 在 j 的左侧（i<j），
+    // 并且 i 对应的元素不大于 j 对应的元素（nums[i]≤nums[j]），那么会发生什么呢？
+    //当滑动窗口向右移动时，只要 i 还在窗口中，那么 j 一定也还在窗口中，这是 i 在 j 的左侧所保证的。
+    // 因此，由于 nums[j] 的存在，nums[i] 一定不会是滑动窗口中的最大值了，我们可以将 nums[i]永久地移除。
 
-        // answer[i] 表示索引 i 左侧所有元素的乘积
-        // 因为索引为 '0' 的元素左侧没有元素， 所以 answer[0] = 1
-        answer[0] = 1;
-        for (int i = 1; i < length; i++) {
-            answer[i] = nums[i - 1] * answer[i - 1];
+    //单调队列（双端队列）
+    public int[] maxSlidingWindow2(int[] nums, int k) {
+        Deque<int[]> deque = new ArrayDeque<>();
+        deque.addLast(new int[]{nums[0],0});
+        for(int i = 1;i<k;i++){
+            while(!deque.isEmpty()&&deque.getLast()[0]<=nums[i]){
+                deque.removeLast();
+            }
+            deque.addLast(new int[]{nums[i],i});
+        }
+        int len = nums.length-k+1;
+        int[] res = new int[len];
+        res[0] = deque.getFirst()[0];
+        for(int i = k;i< nums.length;i++){
+            while(!deque.isEmpty()&&deque.getLast()[0]<=nums[i]){
+                deque.removeLast();
+            }
+            deque.addLast(new int[]{nums[i],i});
+            while(deque.getFirst()[1]<i-k+1){
+                deque.removeFirst();
+            }
+            res[i-k+1] = deque.getFirst()[0];
+        }
+        return res;
+    }
+
+    //分块+预处理
+    public int[] maxSlidingWindow3(int[] nums, int k) {
+        int n = nums.length;
+        int[] prefixMax = new int[n];
+        int[] suffixMax = new int[n];
+        for (int i = 0; i < n; ++i) {
+            if (i % k == 0) {
+                prefixMax[i] = nums[i];
+            }
+            else {
+                prefixMax[i] = Math.max(prefixMax[i - 1], nums[i]);
+            }
+        }
+        for (int i = n - 1; i >= 0; --i) {
+            if (i == n - 1 || (i + 1) % k == 0) {
+                suffixMax[i] = nums[i];
+            } else {
+                suffixMax[i] = Math.max(suffixMax[i + 1], nums[i]);
+            }
         }
 
-        // R 为右侧所有元素的乘积
-        // 刚开始右边没有元素，所以 R = 1
-        int R = 1;
-        for (int i = length - 1; i >= 0; i--) {
-            // 对于索引 i，左边的乘积为 answer[i]，右边的乘积为 R
-            answer[i] = answer[i] * R;
-            // R 需要包含右边所有的乘积，所以计算下一个结果时需要将当前值乘到 R 上
-            R *= nums[i];
+        int[] ans = new int[n - k + 1];
+        for (int i = 0; i <= n - k; ++i) {
+            ans[i] = Math.max(suffixMax[i], prefixMax[i + k - 1]);
         }
-        return answer;
+        return ans;
     }
 
 

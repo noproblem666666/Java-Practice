@@ -1,4 +1,2 @@
-package Leetcode;
-//会议室（二）
-public class rehot72 {
+package Leetcode;public class rehot72 {
 }

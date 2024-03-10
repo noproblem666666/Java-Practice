@@ -1,66 +1,50 @@
 package Leetcode;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
-//二叉树的最近公共祖先
-public class rehot68 {
-    //使用双向队列记录每个结点到根结点的路径，之后从头开始比较
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        Deque<TreeNode> pPath = new ArrayDeque<>();
-        Deque<TreeNode> qPath = new ArrayDeque<>();
-        findPath(root,p,new ArrayDeque<>(),pPath);
-        findPath(root,q,new ArrayDeque<>(),qPath);
-        TreeNode res = root;
-        while(!qPath.isEmpty()&&!pPath.isEmpty()){
-            if(qPath.getFirst()!=pPath.getFirst()){
-                return res;
-            }
-            res = qPath.removeFirst();
-            pPath.removeFirst();
+//除自身以外数组的乘积
+public class rehot69 {
+    //辅助数组分别记录一个位置左边数的乘积和右边数的乘积
+    public int[] productExceptSelf(int[] nums) {
+        int[] left = new int[nums.length];
+        int[] right = new int[nums.length];
+        left[0] = 1;
+        right[nums.length - 1] = 1;
+        for (int i = 1; i < nums.length; i++) {
+            left[i] = left[i - 1] * nums[i - 1];
+        }
+        for (int i = nums.length - 2; i >= 0; i--) {
+            right[i] = right[i + 1] * nums[i + 1];
+        }
+        int[] res = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            res[i] = left[i] * right[i];
         }
         return res;
     }
-    public void findPath(TreeNode root,TreeNode target,Deque<TreeNode> temp,Deque<TreeNode> res){
-        if(root.val == target.val){
-            temp.addLast(root);
-            res.addAll(temp);
-            return;
+
+    //除返回数组外不占用额外空间
+    public int[] productExceptSelf2(int[] nums) {
+        int length = nums.length;
+        int[] answer = new int[length];
+
+        // answer[i] 表示索引 i 左侧所有元素的乘积
+        // 因为索引为 '0' 的元素左侧没有元素， 所以 answer[0] = 1
+        answer[0] = 1;
+        for (int i = 1; i < length; i++) {
+            answer[i] = nums[i - 1] * answer[i - 1];
         }
-        if(root.left!=null){
-            temp.addLast(root);
-            findPath(root.left,target,temp,res);
-            temp.removeLast();
+
+        // R 为右侧所有元素的乘积
+        // 刚开始右边没有元素，所以 R = 1
+        int R = 1;
+        for (int i = length - 1; i >= 0; i--) {
+            // 对于索引 i，左边的乘积为 answer[i]，右边的乘积为 R
+            answer[i] = answer[i] * R;
+            // R 需要包含右边所有的乘积，所以计算下一个结果时需要将当前值乘到 R 上
+            R *= nums[i];
         }
-        if(root.right!=null){
-            temp.addLast(root);
-            findPath(root.right,target,temp,res);
-            temp.removeLast();
-        }
+        return answer;
     }
 
-    //递归方法，最优方法
-    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
-        if (root == null || root == p || root == q) {
-            //只要当前根节点是p和q中的任意一个，就返回（因为不能比这个更深了，再深p和q中的一个就没了）
-            return root;
-        }
-        //根节点不是p和q中的任意一个，那么就继续分别往左子树和右子树找p和q
-        TreeNode left = lowestCommonAncestor2(root.left, p, q);
-        TreeNode right = lowestCommonAncestor2(root.right, p, q);
-        //p和q都没找到，那就没有
-        if(left == null && right == null) {
-            return null;
-        }
-        //左子树没有p也没有q，就返回右子树的结果
-        if (left == null) {
-            return right;
-        }
-        //右子树没有p也没有q就返回左子树的结果
-        if (right == null) {
-            return left;
-        }
-        //左右子树都找到p和q了，那就说明p和q分别在左右两个子树上，所以此时的最近公共祖先就是root
-        return root;
-    }
+
+
 }
