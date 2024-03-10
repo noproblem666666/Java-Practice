@@ -6,7 +6,7 @@ import java.util.Deque;
 import java.util.PriorityQueue;
 
 //滑动窗口最大值 Todo：优先队列和双端单调队列
-public class rehot70 {
+public class rehot69 {
     //优先队列
     public int[] maxSlidingWindow(int[] nums, int k) {
         //因为还要判断这个数是否在滑动窗口中，只存储数不够，还需要用数组存储下标

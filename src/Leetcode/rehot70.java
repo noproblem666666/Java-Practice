@@ -1,6 +1,6 @@
 package Leetcode;
 //搜索二维矩阵（二）（注意观察矩阵从左下角开始往上比和往右比的数的特征。右上角也可以）
-public class rehot71{
+public class rehot70 {
     //Z字形查找左下角开始比较
     //注意区分行和列对应的数
     public boolean searchMatrix(int[][] matrix, int target) {

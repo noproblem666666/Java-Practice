@@ -1,2 +1,4 @@
-package Leetcode;public class rehot77 {
+package Leetcode;
+//删除无效的括号
+public class rehot77 {
 }

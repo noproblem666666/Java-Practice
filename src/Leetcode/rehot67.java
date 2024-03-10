@@ -4,7 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 
 //二叉树的最近公共祖先
-public class rehot68 {
+public class rehot67 {
     //使用双向队列记录每个结点到根结点的路径，之后从头开始比较
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         Deque<TreeNode> pPath = new ArrayDeque<>();

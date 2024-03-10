@@ -1,7 +1,7 @@
 package Leetcode;
 
 //除自身以外数组的乘积
-public class rehot69 {
+public class rehot68 {
     //辅助数组分别记录一个位置左边数的乘积和右边数的乘积
     public int[] productExceptSelf(int[] nums) {
         int[] left = new int[nums.length];

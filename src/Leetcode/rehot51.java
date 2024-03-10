@@ -8,7 +8,7 @@ public class rehot51 {
         }
         ListNode fast = head.next;
         ListNode slow = head;
-        //统计环的长度
+        //统计环的长度（其实原理和下面方法是一样的，这里计算的也可能是多次环的长度）
         //因为只要有环，长度至少为1，因此count初始值应该为1
         int count = 1;
         while(fast!=null){
