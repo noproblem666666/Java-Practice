@@ -2,11 +2,12 @@ package TrueTest.PinDuoDuo;
 import java.util.*;
 public class Test0825_02 {
     public static void main(String[] args) {
+        //注意，奇数与偶数相加必定为奇数，这是偶数变奇数最快的操作，之后这个奇数可以继续和别的偶数相加变为奇数
+        //如果有奇数，让所有偶数依次和他相加就可以变成奇数了。没有奇数的话就先找一个除2最快变成奇数的偶数，变成奇数。
         Scanner in = new Scanner(System.in);
-        // 注意 hasNext 和 hasNextLine 的区别
         int T = in.nextInt();
         List<Integer> list = new ArrayList<>();
-        while (T-->0) { // 注意 while 处理多个 case
+        while (T-->0) {
             int n = in.nextInt();
             Long[] temp = new Long[n];
             for(int i=0;i<n;i++){
@@ -19,6 +20,7 @@ public class Test0825_02 {
             for(int i =0;i<n;i++){
                 Long j = temp[i];
                 int count = 0;
+                //可以把偶数求2的n次方运算替换为(int)(Math.log(T)/Math.log(2)),换底公式，因为java中Math.log()默认以e为底
                 while(j%2==0){
                     j = j/2;
                     count++;

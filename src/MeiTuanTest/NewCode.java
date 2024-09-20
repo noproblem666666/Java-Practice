@@ -1,8 +1,11 @@
 package MeiTuanTest;
 
+import Base.MyArrayList;
+
 import java.util.*;
 
 public class NewCode {
+
     //这是我改进的新的代码，这次不使用StringBuffer进行拼接，使用栈完成IP字段的存储，清除和最后的拼接
     public ArrayList<String> restoreIpAddresses(String s) {
         //先对s字符串进行一个判断

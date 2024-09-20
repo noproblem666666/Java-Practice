@@ -1,7 +1,10 @@
 package TrueTest.PinDuoDuo;
 import java.util.*;
 public class Test0825_01 {
+    List<Integer> add = new ArrayList<>();
     public static void main(String[] args) {
+        Test0825_01 ww = new Test0825_01();
+        //因为是树，每次删边都会多一个联通块，所以相同数量的联通块，一定是从最小的边开始删更优。比较联通块数量为1～n时的答案，求最大值。
         Scanner in = new Scanner(System.in);
         // 注意 hasNext 和 hasNextLine 的区别
         int times = in.nextInt();

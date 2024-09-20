@@ -2,6 +2,7 @@ package TrueTest.PinDuoDuo;
 
 import java.util.*;
 public class Test0825_03 {
+    // Todo：因为只能换到价值更低的礼物，所以每个位置上的数只能变大。最优方案是替换掉不符合条件的最小的数，在此情况下排序对照有多少个位置需要交换即可。
     //该方法只通过了5%用例
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
@@ -41,4 +42,6 @@ public class Test0825_03 {
         }
         System.out.println(count);
     }
+
+
 }
